@@ -1,0 +1,67 @@
+# Columns in the dataset
+
+## All columns and missing values
+0   PassengerId  891 non-null    int64  
+1   Survived     891 non-null    int64  
+2   Pclass       891 non-null    int64  
+3   Name         891 non-null    object 
+4   Sex          891 non-null    object 
+5   [] Age       714 non-null    float64
+6   SibSp        891 non-null    int64  
+7   Parch        891 non-null    int64  
+8   Ticket       891 non-null    object 
+9   Fare         891 non-null    float64
+10  [] Cabin     204 non-null    object 
+11  Embarked     889 non-null    object 
+
+## Survived
+[] Is the dependent value, all visualizations have to use it to evaluate the predictability power.
+
+## Pclass
+[] Transform to a categorical value.
+[] Categorical value. We need to encode it.
+
+## Name
+[] String value, maybe we can associate some lastnames or extract information. 
+[] We can extract some information Mr., Mrs., Miss, etc.
+
+## Sex
+[] Categorical value. We need to encode it.
+
+## Age
+[] It's possible to apply feature engineering to simplify the age state & incorporate non linearity
+[] Some missing values, need to evaluate what to do.
+
+## Sibps
+[] ??
+
+## Parch
+[] ??
+
+## Ticket
+[] String and number values. Maybe we can extract information from letters or numbers logic.
+
+## Fare
+[] ??
+
+## Cabin
+[] String and number values. Maybe we can extract information from letters or numbers logic.
+[] Some missing values, need to evaluate what to do.
+
+## Embarked
+[] Categorical values. We need to encode it.
+
+# Models
+
+## First Approach
+[] Use only the numerical values to evaluate some classification models: KMeans, KNeighbors, XGboost, LightGB, CatBoost
+
+Prediction in train set:
+Prediction in test set:
+
+## Second Approach
+[] Evaluate models with some alternatives of using or imputing missing values.
+[] Evaluate models with some feature engineering.
+
+Prediction in train set:
+Prediction in test set:
