@@ -12,18 +12,26 @@
 8   Ticket       891 non-null    object 
 9   Fare         891 non-null    float64
 10  [] Cabin     204 non-null    object 
-11  Embarked     889 non-null    object 
+11  [] Embarked  889 non-null    object 
 
 ## Survived
-[] Is the dependent value, all visualizations have to use it to evaluate the predictability power.
+[x] Is the dependent value, all visualizations have to use it to evaluate the predictability power.
+[x] There are more not survived (549) than survived (342).
 
 ## Pclass
 [] Transform to a categorical value.
 [] Categorical value. We need to encode it.
 
 ## Name
-[] String value, maybe we can associate some lastnames or extract information. 
-[] We can extract some information Mr., Mrs., Miss, etc.
+[x] String value, maybe we can associate some lastnames or extract information. 
+[x] Create value if have parenthesis
+[x] Create value if have quotes
+[x] Create value for title (Mrs, Mr, Miss)
+[x] Create value for number of words (names)
+[x] Create value for numer of letters
+[x] Average large of the names
+[x] Large of the lastname
+[x] Composed lastname
 
 ## Sex
 [] Categorical value. We need to encode it.
@@ -32,17 +40,17 @@
 [] It's possible to apply feature engineering to simplify the age state & incorporate non linearity
 [] Some missing values, need to evaluate what to do.
 
-## Sibps
-[] ??
+## Sibps (# siblings / spouses aboard titanic)
+[] More can correlate with more survive probability?
 
-## Parch
-[] ??
+## Parch (# parents / children aboard titanic)
+[] More can correlate with more survive probability?
 
 ## Ticket
 [] String and number values. Maybe we can extract information from letters or numbers logic.
 
 ## Fare
-[] ??
+[] Can we classify the tickets fare into groups?
 
 ## Cabin
 [] String and number values. Maybe we can extract information from letters or numbers logic.
@@ -50,6 +58,7 @@
 
 ## Embarked
 [] Categorical values. We need to encode it.
+[] Two missing values
 
 # Models
 
