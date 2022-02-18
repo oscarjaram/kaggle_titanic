@@ -10,6 +10,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+pd.set_option('display.max_rows', 2000)
+
 # %%
 # Load the data and backup the dataframe
 df_train = pd.read_csv(params.path_train_data)
@@ -25,6 +27,8 @@ df_train.describe()
 # See the correlation between variables
 sns.pairplot(df_train)
 plt.show()
+
+# Mean probability of survive is 38.39%
 
 # %%
 def plot_survived_cat_analysis(df: pd.DataFrame, column_name: str):
@@ -42,7 +46,7 @@ def plot_survived_cat_analysis(df: pd.DataFrame, column_name: str):
     plt.title("Quantity")
     plt.show()
 
-def plot_survived_binary_analysis(df: pd.DataFrame, column_name: str):
+def plot_survived_tab_analysis(df: pd.DataFrame, column_name: str):
     df_grouped = df[[column_name, "Survived"]].groupby([column_name])
     print(df_grouped.agg([np.mean, len]))
 # %%
@@ -95,7 +99,7 @@ plot_survived_cat_analysis(
 df_name["Name_quote"] = df_name.Name.str.contains('\"').astype(int)
 df_name.loc[df_name["Name_quote"] > 0].head()
 
-plot_survived_binary_analysis(
+plot_survived_cat_analysis(
     df=df_name, column_name='Name_quote')
 
 # %%
@@ -103,7 +107,7 @@ plot_survived_binary_analysis(
 df_name["Name_parenthesis"] = df_name.Name.str.contains('\)').astype(int)
 df_name.loc[df_name["Name_parenthesis"] > 0].head()
 
-plot_survived_binary_analysis(
+plot_survived_cat_analysis(
     df=df_name, column_name='Name_parenthesis')
 
 # %%
@@ -122,22 +126,10 @@ plot_survived_cat_analysis(
     df=df_name, column_name='Name_number_words')
 
 # %%
-# Create value for numer of letters
-df_name["Name_number_letters"] = df_name.Name\
-    .str.replace(' ', '')\
-    .str.replace(',', '')\
-    .str.replace('.', '')\
-    .str.len()
-
-plot_survived_cat_analysis(
-    df=df_name, column_name='Name_number_letters')
-
-# %%
 # Large of the names and lastnames
 df_name["Name_name"] = df_name.Name.str.split(",", expand=True)[1]
-df_name["Name_lastname"] = df_name.Name.str.split(",", expand=True)[0]
 
-df_name["Name_name_count"] = df_name["Name_lastname"]\
+df_name["Name_name_count"] = df_name["Name_name"]\
     .str.replace(' ', '')\
     .str.replace(',', '')\
     .str.replace('.', '')\
@@ -147,7 +139,9 @@ plot_survived_cat_analysis(
     df=df_name, column_name='Name_name_count')
 
 # %%
-df_name["Name_lastname_count"] = df_name["Name_name"]\
+df_name["Name_lastname"] = df_name.Name.str.split(",", expand=True)[0]
+
+df_name["Name_lastname_count"] = df_name["Name_lastname"]\
     .str.replace(' ', '')\
     .str.replace(',', '')\
     .str.replace('.', '')\
@@ -164,7 +158,7 @@ df_name["Name_lastname_composed"] = df_name["Name_lastname"]\
     .str.contains('-')\
     .astype('int')
 
-plot_survived_binary_analysis(
+plot_survived_cat_analysis(
     df=df_name, column_name='Name_lastname_composed')
 
 df_name.head()
@@ -176,7 +170,45 @@ list_common_names = ['William', ' John', ' Henry', ' Charles', ' George', 'Sage'
 for name in list_common_names:
     str_column_name = "Name_" + name
     df_name[str_column_name] = df_name.Name.str.contains(name).astype(int)
-    plot_survived_binary_analysis(df_name, str_column_name)
+    print(name)
+    plot_survived_cat_analysis(df_name, str_column_name)
     print("-"*50)
+
+# %%
+# Sex analysis
+plot_survived_cat_analysis(
+    df=df_train, column_name='Sex')
+
+# %%
+# Age analysis
+plot_survived_cat_analysis(
+    df=df_train, column_name='Age')
+
+# %%
+df_age = df_train[["Age", "Survived"]].copy(deep=True)
+df_age.head()
+
+# %%
+df_train.Age.isna().sum()
+# 177 values without age
+
+# %%
+# Have the NA values the same survive probability?
+df_age = df_train[["Age", "Survived", "Sex", "Pclass"]].copy(deep=True)
+df_age["hasAge"] = 1
+df_age["hasAge"].loc[df_age["Age"].isna()] = 0
+
+# The people with age has 40.6% probability vs 29.3% the people without age.
+df_age[["hasAge", "Survived", "Sex", "Pclass"]].groupby(["hasAge", "Sex", "Pclass"]).agg([np.mean, len])
+
+# %%
+bins = [-np.inf, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, np.inf]
+
+df_age["Age_cat"] = 'No Age'
+df_age.loc[df_age.Age.notnull(), "Age_cat"] = pd.cut(
+    df_age["Age"].loc[df_age.Age.notnull()], bins)
+
+plot_survived_cat_analysis(
+    df=df_age, column_name='Age_cat')
 
 # %%

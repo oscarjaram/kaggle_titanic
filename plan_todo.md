@@ -19,7 +19,7 @@
 [x] There are more not survived (549) than survived (342).
 
 ## Pclass
-[] Transform to a categorical value.
+[x] Transform to a categorical value.
 [] Categorical value. We need to encode it.
 
 ## Name
@@ -32,13 +32,15 @@
 [x] Average large of the names
 [x] Large of the lastname
 [x] Composed lastname
+[] Categorical values. We need to encode it.
 
 ## Sex
 [] Categorical value. We need to encode it.
 
 ## Age
-[] It's possible to apply feature engineering to simplify the age state & incorporate non linearity
-[] Some missing values, need to evaluate what to do.
+[x] It's possible to apply feature engineering to simplify the age state & incorporate non linearity
+[x] Some missing values, need to evaluate what to do.
+[] Categorical value. We need to encode it.
 
 ## Sibps (# siblings / spouses aboard titanic)
 [] More can correlate with more survive probability?
@@ -59,6 +61,14 @@
 ## Embarked
 [] Categorical values. We need to encode it.
 [] Two missing values
+
+# Preprocessing
+
+## Scale variables
+
+## One hot encoder
+
+## PCA
 
 # Models
 
