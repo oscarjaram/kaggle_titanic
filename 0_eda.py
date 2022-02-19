@@ -212,3 +212,65 @@ plot_survived_cat_analysis(
     df=df_age, column_name='Age_cat')
 
 # %%
+# SibSp analysis
+plot_survived_cat_analysis(
+    df=df_train, column_name='SibSp')
+
+# It has decrease exponential distribution
+# There are a difference between "Alone person" than the people with Company
+# There are a difference between "Big family" (more than 5) than the people with Company
+df_sibsp = df_train[["SibSp", "Survived"]].copy(deep=True)
+
+df_sibsp["SibSp_alone"] = 0
+df_sibsp.loc[df_sibsp.SibSp == 0, "SibSp_alone"] = 1
+
+df_sibsp["SibSp_bigfamily"] = 0
+df_sibsp.loc[df_sibsp.SibSp > 4, "SibSp_bigfamily"] = 1
+
+df_sibsp.head(100)
+# %%
+# Parch analysis
+plot_survived_cat_analysis(
+    df=df_train, column_name='Parch')
+
+df_parch = df_train[["Parch", "Survived"]].copy(deep=True)
+
+df_parch["Parch_alone"] = 0
+df_parch.loc[df_parch.Parch == 0, "Parch_alone"] = 1
+
+df_parch["Parch_bigfamily"] = 0
+df_parch.loc[df_parch.Parch > 3, "Parch_bigfamily"] = 1
+
+df_parch.head(100)
+
+# %%
+# Ticket analysis
+df_train['Ticket']
+
+df_name["Name_title"] = df_name.Name\
+    .str.split(",", expand=True)[1]\
+    .str.split(" ", expand=True, n=2)[1]
+df_name.head()
+
+# %%
+# Fare analysis
+df_train[["Fare", "Survived"]].plot.scatter(x = 'Fare', y='Survived')
+
+# %%
+df_train[['Fare', 'Ticket', 'Cabin', 'Embarked']].sort_values(by='Fare')
+
+# %%
+plt.hist(df_train.Fare, bins=50)
+plt.log
+plt.show()
+
+# %%
+# Cabin analysis
+
+
+
+# %%
+# Embarked analysis
+plot_survived_cat_analysis(
+    df=df_train, column_name='Embarked')
+# %%

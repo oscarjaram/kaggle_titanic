@@ -42,25 +42,33 @@
 [x] Some missing values, need to evaluate what to do.
 [] Categorical value. We need to encode it.
 
-## Sibps (# siblings / spouses aboard titanic)
-[] More can correlate with more survive probability?
+## SibSp (# siblings / spouses aboard titanic)
+[x] The alone people is a interesting case
+[x] The people with more than 4 is a interesting case
+[] Wee need to scale the values
 
 ## Parch (# parents / children aboard titanic)
+[x] The alone people is a interesting case
+[x] The people with more than 3 is a interesting case
 [] More can correlate with more survive probability?
 
 ## Ticket
 [] String and number values. Maybe we can extract information from letters or numbers logic.
+[] Extract categories before the code
+[] Analyze the numeric code
 
 ## Fare
-[] Can we classify the tickets fare into groups?
+[] Clean outliers
+[] Check no linearity
+[] PowerTransformer
 
 ## Cabin
 [] String and number values. Maybe we can extract information from letters or numbers logic.
 [] Some missing values, need to evaluate what to do.
 
 ## Embarked
-[] Categorical values. We need to encode it.
-[] Two missing values
+[x] Categorical values. We need to encode it.
+[] Two missing values. Minimal, we can delete it.
 
 # Preprocessing
 
