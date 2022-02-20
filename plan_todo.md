@@ -53,22 +53,22 @@
 [] More can correlate with more survive probability?
 
 ## Ticket
-[] String and number values. Maybe we can extract information from letters or numbers logic.
-[] Extract categories before the code
-[] Analyze the numeric code
+[x] String and number values. Maybe we can extract information from letters or numbers logic.
+[x] Extract categories before the code
+[x] Analyze the numeric code
 
 ## Fare
-[] Clean outliers
-[] Check no linearity
-[] PowerTransformer
+[x] Clean outliers
+[x] Check no linearity
+[x] PowerTransformer
 
 ## Cabin
-[] String and number values. Maybe we can extract information from letters or numbers logic.
-[] Some missing values, need to evaluate what to do.
+[x] String and number values. Maybe we can extract information from letters or numbers logic.
+[x] Some missing values, need to evaluate what to do.
 
 ## Embarked
 [x] Categorical values. We need to encode it.
-[] Two missing values. Minimal, we can delete it.
+[x] Two missing values. Minimal, we can delete it.
 
 # Preprocessing
 

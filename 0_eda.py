@@ -4,6 +4,7 @@
 # %autoreaload 2
 
 # Import libraries
+from typing import List
 import params
 import numpy as np
 import pandas as pd
@@ -245,32 +246,138 @@ df_parch.head(100)
 
 # %%
 # Ticket analysis
-df_train['Ticket']
+df_ticket = df_train[['Ticket', 'Survived']].copy(deep=True)
+serie_ticket = df_train['Ticket'].copy(deep=True)
 
-df_name["Name_title"] = df_name.Name\
-    .str.split(",", expand=True)[1]\
-    .str.split(" ", expand=True, n=2)[1]
-df_name.head()
+def _get_ticket_int(list_str: List[str]):
+    number = list_str[-1]
+    return number
+
+df_ticket["Ticket_number"] =  serie_ticket\
+    .str.replace(".", "")\
+    .str.rsplit(" ", n=1)\
+    .apply(lambda x: x[-1])
+
+df_ticket["Ticket_number"] = pd.to_numeric(
+    df_ticket["Ticket_number"], 
+    errors='coerce'
+)
+
+def _get_ticket_str(list_str: List[str]):
+    if len(list_str) < 2:
+        return np.nan
+    code = " ".join(list_str[:-1])
+    return code.upper().replace(" ", "")
+
+df_ticket["Ticket_code"] = serie_ticket\
+    .str.replace(".", "")\
+    .str.replace("/", " ")\
+    .str.rsplit(" ", n=1)\
+    .apply(_get_ticket_str)
+
+df_ticket.head()
+
+# %%
+# Get the correct bins to adjust intervals with equal volumne 
+n_intervals = 45
+array_cortes = np.linspace(0, 1, n_intervals + 1)
+list_values = list(df_ticket[["Ticket_number"]].quantile(array_cortes)['Ticket_number'])
+list_values[0], list_values[-1] = -np.inf, +np.inf
+
+# Adjust people with the correct interval
+df_ticket["Ticket_number_cat"] = 'No number'
+df_ticket.loc[df_ticket.Ticket_number.notnull(), "Ticket_number_cat"] = pd.cut(
+    df_ticket["Ticket_number"].loc[df_ticket.Ticket_number.notnull()], bins=list_values)
+
+plot_survived_cat_analysis(
+    df=df_ticket, column_name='Ticket_number_cat')
+
+# We could use more intervals and then classify using the survive probability
+
+# %%
+# Print the list of names
+big_list_words = []
+for ticket in df_ticket["Ticket_code"]:
+    big_list_words += str(ticket).upper().replace(" ", "").split()
+
+# Print most frequent words
+array_words = np.array(big_list_words)
+words_freq = pd.value_counts(array_words).to_dict()
+for key, value in words_freq.items():
+    print(f"{key}: {value}")
+
+
+# %%
+# Has ticket code
+df_ticket["hasTicket_code"] = df_ticket.Ticket_code.notnull().astype(int)
+plot_survived_cat_analysis(
+    df=df_ticket, column_name='hasTicket_code')
+
+# It seems no relevant information
+
+# %%
+# Has ticket code with /
+df_ticket["Ticket_slash"] = df_ticket.Ticket.str.contains("/").astype('int')
+plot_survived_cat_analysis(
+    df=df_ticket, column_name='Ticket_slash')
+
+# %%
+# Lenght of ticket code
+df_ticket["Ticket_number_log"] = np.trunc(np.log2(df_ticket.Ticket_number))
+plot_survived_cat_analysis(
+    df=df_ticket, column_name='Ticket_number_log')
+
+# %%
+# This ideas has descarted to affect many little rows
+# Frequent words: PC(60), CA(41), A5(21), STONO2(18), SOTONOQ(15), 
+# SCPARIS(11), WC(10), A4(7), OQ(15), O(12), 2(12), W(11), PP(10), O2(8), PARIS(7)
+# Has ticket code common prefix
 
 # %%
 # Fare analysis
-df_train[["Fare", "Survived"]].plot.scatter(x = 'Fare', y='Survived')
+df_fare = df_train[["Fare", "Survived"]]
+serie_fare = df_fare["Fare"]
+
+# Get the correct bins to adjust intervals with equal volumne 
+n_intervals = 20
+array_cortes = np.linspace(0, 1, n_intervals + 1)
+list_values = list(df_fare[["Fare"]].quantile(array_cortes)['Fare'])
+list_values[0], list_values[-1] = -np.inf, +np.inf
+
+# Adjust people with the correct interval
+df_fare["Fare_cat"] = 'No number'
+df_fare.loc[df_fare.Fare.notnull(), "Fare_cat"] = pd.cut(
+    df_fare["Fare"].loc[df_fare.Fare.notnull()], bins=list_values)
+
+plot_survived_cat_analysis(
+    df=df_fare, column_name='Fare_cat')
 
 # %%
-df_train[['Fare', 'Ticket', 'Cabin', 'Embarked']].sort_values(by='Fare')
+# Add some exponential scaler to the value
+df_fare["Fare_log"] = np.trunc(np.log2(df_fare.Fare))
+plot_survived_cat_analysis(
+    df=df_fare, column_name='Fare_log')
 
-# %%
-plt.hist(df_train.Fare, bins=50)
-plt.log
-plt.show()
+# %% Cabin Analysis
+df_cabin = df_train[["Cabin", "Survived"]]
+serie_cabin = df_cabin["Cabin"]
 
-# %%
-# Cabin analysis
+df_cabin["hasCabin"] = df_cabin.Cabin.notnull().astype(int)
 
+# plot_survived_cat_analysis(
+#     df=df_cabin, column_name='hasCabin')
 
+df_cabin.loc[df_cabin.hasCabin > 0]
+
+df_cabin["Cabin_letter"] = 'No Cabin'
+df_cabin.loc[df_cabin.Cabin.notnull(), "Cabin_letter"] = df_cabin.Cabin.str[0]
+
+plot_survived_cat_analysis(
+    df=df_cabin, column_name='Cabin_letter')
+
+# Some numbers (We don't going to test it because its groups are too litle)
 
 # %%
 # Embarked analysis
 plot_survived_cat_analysis(
     df=df_train, column_name='Embarked')
-# %%
